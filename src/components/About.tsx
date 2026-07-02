@@ -232,8 +232,8 @@ export default function About() {
             {/* Resume Action Button */}
             <div className="pt-4">
               <a
-                href="/tizul-islam-cv.pdf"
-                download="Tizul-Islam-CV.pdf"
+                href="/Tizul_Islam_Resume.pdf"
+                download="Tizul_Islam_Resume.pdf"
                 className="relative inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-bold text-accent bg-accent/5 border border-accent/20 hover:bg-accent hover:text-black transition-all duration-300 font-inter cursor-pointer overflow-hidden group shadow-[0_0_15px_rgba(0,255,153,0.05)] hover:shadow-[0_0_20px_rgba(0,255,153,0.2)]"
               >
                 {/* Sparkle Glow Overlays */}

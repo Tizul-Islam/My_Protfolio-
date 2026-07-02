@@ -130,8 +130,8 @@ export default function Hero() {
             </Magnetic>
             <Magnetic>
               <a
-                href="/tizul-islam-cv.pdf"
-                download="Tizul-Islam-CV.pdf"
+                href="/Tizul_Islam_Resume.pdf"
+                download="Tizul_Islam_Resume.pdf" 
                 className="px-8 py-3 rounded-full font-bold text-gray-300 border border-gray-800 hover:border-accent hover:text-accent bg-card-bg/40 hover:bg-accent/5 transition-all duration-300 transform hover:-translate-y-0.5 font-inter cursor-pointer block"
               >
                 Download Resume
