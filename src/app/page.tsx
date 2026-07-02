@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Pillars from "@/components/Pillars";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Services from "@/components/Services";
@@ -12,6 +13,7 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <Pillars />
       <About />
       <Skills />
       <Services />
