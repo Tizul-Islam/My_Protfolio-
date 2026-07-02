@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
+import Magnetic from "./Magnetic";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -36,11 +37,13 @@ export default function Navbar() {
       >
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="#home" className="text-xl font-black text-white flex items-center gap-1 group select-none">
-            <span className="text-accent group-hover:-translate-x-1 transition-transform duration-300 font-bold">&lt;</span>
-            <span className="tracking-wide">Tizul</span>
-            <span className="text-accent group-hover:translate-x-1 transition-transform duration-300 font-bold">/&gt;</span>
-          </Link>
+          <Magnetic>
+            <Link href="#home" className="text-xl font-black text-white flex items-center gap-1 group select-none">
+              <span className="text-accent group-hover:-translate-x-1 transition-transform duration-300 font-bold">&lt;</span>
+              <span className="tracking-wide">Tizul</span>
+              <span className="text-accent group-hover:translate-x-1 transition-transform duration-300 font-bold">/&gt;</span>
+            </Link>
+          </Magnetic>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
@@ -66,12 +69,14 @@ export default function Navbar() {
 
           {/* Action Button */}
           <div className="hidden md:block">
-            <Link
-              href="#contact"
-              className="px-5 py-2 text-xs uppercase tracking-wider font-bold text-black bg-accent rounded-full hover:bg-accent-hover shadow-[0_0_15px_rgba(0,255,153,0.15)] hover:shadow-[0_0_20px_rgba(0,255,153,0.35)] transition-all duration-300 font-inter"
-            >
-              Hire Me
-            </Link>
+            <Magnetic>
+              <Link
+                href="#contact"
+                className="px-5 py-2 text-xs uppercase tracking-wider font-bold text-black bg-accent rounded-full hover:bg-accent-hover shadow-[0_0_15px_rgba(0,255,153,0.15)] hover:shadow-[0_0_20px_rgba(0,255,153,0.35)] transition-all duration-300 font-inter block"
+              >
+                Hire Me
+              </Link>
+            </Magnetic>
           </div>
 
           {/* Mobile Toggle */}

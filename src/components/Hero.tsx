@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { SiNextdotjs, SiTypescript, SiPostgresql, SiDocker } from "react-icons/si";
+import Magnetic from "./Magnetic";
 
 const socialLinks = [
   { Icon: FaGithub, href: "https://github.com/Tizul-Islam", label: "GitHub" },
@@ -12,6 +14,39 @@ const socialLinks = [
 ];
 
 export default function Hero() {
+  const roles = ["Full Stack Developer", "Software Engineer", "Problem Solver"];
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [displayedRole, setDisplayedRole] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentFullRole = roles[currentRoleIndex];
+    let timer: NodeJS.Timeout;
+
+    if (!isDeleting) {
+      if (displayedRole !== currentFullRole) {
+        timer = setTimeout(() => {
+          setDisplayedRole(currentFullRole.slice(0, displayedRole.length + 1));
+        }, 80);
+      } else {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1500);
+      }
+    } else {
+      if (displayedRole !== "") {
+        timer = setTimeout(() => {
+          setDisplayedRole(displayedRole.slice(0, -1));
+        }, 40);
+      } else {
+        setIsDeleting(false);
+        setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayedRole, isDeleting, currentRoleIndex]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -70,8 +105,9 @@ export default function Hero() {
             Hi, I&apos;m <span className="text-white relative">Tizul Islam</span>
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-emerald-400 to-teal-400">
-              Full Stack Developer
+              {displayedRole}
             </span>
+            <span className="text-accent animate-pulse font-light">|</span>
           </motion.h1>
 
           {/* Subtitle / Description */}
@@ -84,19 +120,23 @@ export default function Hero() {
 
           {/* Call to Action Buttons */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-2">
-            <Link
-              href="#contact"
-              className="relative inline-flex items-center justify-center bg-accent text-black px-8 py-3 rounded-full font-bold hover:bg-accent-hover transition-all duration-300 shadow-[0_0_20px_rgba(0,255,153,0.25)] hover:shadow-[0_0_30px_rgba(0,255,153,0.45)] transform hover:-translate-y-0.5 font-inter"
-            >
-              Hire Me
-            </Link>
-            <a
-              href="/tizul-islam-cv.pdf"
-              download="Tizul-Islam-CV.pdf"
-              className="px-8 py-3 rounded-full font-bold text-gray-300 border border-gray-800 hover:border-accent hover:text-accent bg-card-bg/40 hover:bg-accent/5 transition-all duration-300 transform hover:-translate-y-0.5 font-inter cursor-pointer"
-            >
-              Download Resume
-            </a>
+            <Magnetic>
+              <Link
+                href="#contact"
+                className="relative inline-flex items-center justify-center bg-accent text-black px-8 py-3 rounded-full font-bold hover:bg-accent-hover transition-all duration-300 shadow-[0_0_20px_rgba(0,255,153,0.25)] hover:shadow-[0_0_30px_rgba(0,255,153,0.45)] transform hover:-translate-y-0.5 font-inter block"
+              >
+                Hire Me
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href="/tizul-islam-cv.pdf"
+                download="Tizul-Islam-CV.pdf"
+                className="px-8 py-3 rounded-full font-bold text-gray-300 border border-gray-800 hover:border-accent hover:text-accent bg-card-bg/40 hover:bg-accent/5 transition-all duration-300 transform hover:-translate-y-0.5 font-inter cursor-pointer block"
+              >
+                Download Resume
+              </a>
+            </Magnetic>
           </motion.div>
 
           {/* Social Links */}

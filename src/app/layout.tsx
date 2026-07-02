@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 
 import WaterBackground from "@/components/WaterBackground";
 import CustomCursor from "@/components/CustomCursor";
+import Preloader from "@/components/Preloader";
 
 export default function RootLayout({
   children,
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className="font-poppins bg-background text-foreground antialiased selection:bg-accent/30 selection:text-accent">
         <WaterBackground />
         <CustomCursor />
+        <Preloader />
         {children}
       </body>
     </html>
