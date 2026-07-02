@@ -16,80 +16,106 @@ const navLinks = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/80 backdrop-blur-md border-b border-card-border py-4" : "bg-transparent py-6"
-      }`}
-    >
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="#home" className="text-2xl font-bold text-white flex items-center gap-1 group">
-          <span className="text-accent group-hover:text-white transition-colors">&lt;</span>
-          Tizul
-          <span className="text-accent group-hover:text-white transition-colors">/&gt;</span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm text-gray-300 hover:text-accent font-inter transition-colors relative group"
-            >
-              {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-300 group-hover:w-full" />
-            </Link>
-          ))}
-          <Link
-            href="#contact"
-            className="px-5 py-2 rounded-full border border-accent text-accent font-medium hover:bg-accent hover:text-black transition-all duration-300 text-sm"
-          >
-            Hire Me
+    <>
+      <header
+        className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full ${
+          scrolled
+            ? "top-4 w-[90%] max-w-5xl bg-[#0a0a0af0]/75 border border-card-border/80 shadow-[0_15px_30px_rgba(0,0,0,0.6)] backdrop-blur-lg px-6 py-2.5"
+            : "top-0 w-full bg-transparent px-8 py-6 border-b border-transparent"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="#home" className="text-xl font-black text-white flex items-center gap-1 group select-none">
+            <span className="text-accent group-hover:-translate-x-1 transition-transform duration-300 font-bold">&lt;</span>
+            <span className="tracking-wide">Tizul</span>
+            <span className="text-accent group-hover:translate-x-1 transition-transform duration-300 font-bold">/&gt;</span>
           </Link>
-        </nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-2xl text-white"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <RiCloseLine /> : <RiMenu3Line />}
-        </button>
-      </div>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onMouseEnter={() => setHoveredLink(link.name)}
+                onMouseLeave={() => setHoveredLink(null)}
+                className="relative px-4 py-2 text-[13px] uppercase tracking-wider font-bold text-gray-400 hover:text-accent font-inter transition-all duration-300"
+              >
+                <span className="relative z-10">{link.name}</span>
+                {hoveredLink === link.name && (
+                  <motion.span
+                    layoutId="navHover"
+                    className="absolute inset-0 bg-accent/5 border border-accent/10 rounded-full z-0"
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  />
+                )}
+              </Link>
+            ))}
+          </nav>
 
-      {/* Mobile Nav */}
+          {/* Action Button */}
+          <div className="hidden md:block">
+            <Link
+              href="#contact"
+              className="px-5 py-2 text-xs uppercase tracking-wider font-bold text-black bg-accent rounded-full hover:bg-accent-hover shadow-[0_0_15px_rgba(0,255,153,0.15)] hover:shadow-[0_0_20px_rgba(0,255,153,0.35)] transition-all duration-300 font-inter"
+            >
+              Hire Me
+            </Link>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button
+            className="md:hidden text-2xl text-gray-300 hover:text-white transition-colors cursor-pointer"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <RiCloseLine /> : <RiMenu3Line />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-card-bg border-b border-card-border overflow-hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-20 left-[5%] right-[5%] z-45 bg-[#0a0a0af0]/95 border border-card-border/80 rounded-3xl p-6 backdrop-blur-lg shadow-2xl md:hidden"
           >
-            <nav className="flex flex-col p-6 gap-4">
+            <nav className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-gray-300 hover:text-accent font-inter transition-colors text-lg"
+                  className="text-gray-400 hover:text-accent font-inter transition-colors text-base font-bold py-2 border-b border-gray-900/50 last:border-0"
                 >
                   {link.name}
                 </Link>
               ))}
+              <Link
+                href="#contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-2 w-full text-center py-2.5 text-sm uppercase tracking-wider font-bold text-black bg-accent rounded-xl hover:bg-accent-hover transition-colors font-inter block"
+              >
+                Hire Me
+              </Link>
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

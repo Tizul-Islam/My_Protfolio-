@@ -35,187 +35,189 @@ export default function Contact() {
           setSuccess("Message sent successfully!");
         },
         (error) => {
-          console.log(error);
+          console.error(error);
           setLoading(false);
           setSuccess("Failed to send message!");
         }
       );
   };
 
+  const contactInfo = [
+    { 
+      icon: HiOutlineMail, 
+      title: "Email", 
+      value: "tizulislamtt@gmail.com", 
+      href: "mailto:tizulislamtt@gmail.com" 
+    },
+    { 
+      icon: HiOutlinePhone, 
+      title: "Phone", 
+      value: "+880 1875-607026", 
+      href: "tel:+8801875607026" 
+    },
+    { 
+      icon: HiOutlineLocationMarker, 
+      title: "Location", 
+      value: "West Kafrul, Mirpur, Dhaka-1216", 
+      href: null 
+    },
+  ];
+
   return (
-    <section id="contact" className="py-24 bg-card-bg/30">
+    <section id="contact" className="py-24 bg-card-bg/10 relative overflow-hidden">
+      {/* Glow effect */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-accent/5 rounded-full blur-[150px] pointer-events-none -z-10" />
+
       <div className="container mx-auto px-6">
         <SectionHeading title="Get In Touch" subtitle="Contact" />
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Left Side */}
+        <div className="grid lg:grid-cols-12 gap-12 max-w-5xl mx-auto items-start">
+          {/* Left Side: Contact Cards */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col space-y-8"
+            className="lg:col-span-5 flex flex-col space-y-6"
           >
             <div>
-              <h3 className="text-3xl font-bold text-white mb-4">
-                Let&apos;s Work Together
+              <h3 className="text-3xl font-extrabold text-white mb-4 leading-tight font-poppins">
+                Let&apos;s Work <br />
+                <span className="text-accent">Together</span>
               </h3>
-
-              <p className="text-gray-400 font-inter leading-relaxed max-w-md">
-                I&apos;m open to internships, junior roles, and freelance web
-                projects. Reach out if you&apos;d like to collaborate or discuss
-                an opportunity.
+              <p className="text-gray-400 font-inter text-[15px] leading-relaxed">
+                I&apos;m open to internships, full-time junior developer roles, and freelance collaborations. Reach out to discuss an opportunity or just to say hello!
               </p>
             </div>
 
-            <div className="space-y-6">
-              {/* Email */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-card-bg border border-card-border rounded-xl flex items-center justify-center text-accent flex-shrink-0">
-                  <HiOutlineMail className="text-xl" />
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400 mb-1">
-                    Email
-                  </h4>
-
+            <div className="space-y-4">
+              {contactInfo.map((info, idx) => {
+                const Icon = info.icon;
+                const content = info.href ? (
                   <a
-                    href="mailto:tizulislamtt@gmail.com"
-                    className="text-white font-medium hover:text-accent transition-colors"
+                    href={info.href}
+                    className="text-white font-medium hover:text-accent transition-colors font-inter text-[15px]"
                   >
-                    tizulislamtt@gmail.com
+                    {info.value}
                   </a>
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-card-bg border border-card-border rounded-xl flex items-center justify-center text-accent flex-shrink-0">
-                  <HiOutlinePhone className="text-xl" />
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400 mb-1">
-                    Phone
-                  </h4>
-
-                  <a
-                    href="tel:+8801875607026"
-                    className="text-white font-medium hover:text-accent transition-colors"
-                  >
-                    +880 1875-607026
-                  </a>
-                </div>
-              </div>
-
-              {/* Location */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-card-bg border border-card-border rounded-xl flex items-center justify-center text-accent flex-shrink-0">
-                  <HiOutlineLocationMarker className="text-xl" />
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400 mb-1">
-                    Location
-                  </h4>
-
-                  <p className="text-white font-medium">
-                    West Kafrul, Mirpur, Dhaka-1216
+                ) : (
+                  <p className="text-white font-medium font-inter text-[15px]">
+                    {info.value}
                   </p>
-                </div>
-              </div>
+                );
+
+                return (
+                  <div 
+                    key={idx} 
+                    className="flex items-center gap-4 bg-card-bg/40 border border-card-border/80 p-4.5 rounded-2xl hover:border-accent/30 transition-all duration-300 group shadow-lg"
+                  >
+                    <div className="w-12 h-12 bg-accent/5 border border-accent/10 rounded-xl flex items-center justify-center text-accent flex-shrink-0 group-hover:scale-110 group-hover:bg-accent/10 transition-all duration-300">
+                      <Icon className="text-xl" />
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5 font-inter">
+                        {info.title}
+                      </h4>
+                      {content}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </motion.div>
 
-          {/* Right Side Form */}
+          {/* Right Side: Message Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="lg:col-span-7 w-full"
           >
             <form
               ref={form}
               onSubmit={sendEmail}
-              className="bg-card-bg border border-card-border p-8 rounded-2xl flex flex-col gap-5"
+              className="bg-card-bg/60 backdrop-blur-sm border border-card-border/80 p-8 rounded-3xl flex flex-col gap-5 shadow-2xl"
             >
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Send me a message
+              <h3 className="text-xl font-bold text-white mb-1 font-poppins">
+                Send Me A Message
               </h3>
 
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Your Name
-                </label>
+              {/* Grid for Name & Email */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Name */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    name="from_name"
+                    required
+                    placeholder="John Doe"
+                    className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px]"
+                  />
+                </div>
 
-                <input
-                  type="text"
-                  name="from_name"
-                  required
-                  placeholder="Your name"
-                  className="w-full bg-[#0d0d0d] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-inter"
-                />
+                {/* Email */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
+                    Your Email
+                  </label>
+                  <input
+                    type="email"
+                    name="from_email"
+                    required
+                    placeholder="john@example.com"
+                    className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px]"
+                  />
+                </div>
               </div>
 
-              {/* Email */}
+              {/* Subject */}
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Your Email
-                </label>
-
-                <input
-                  type="email"
-                  name="from_email"
-                  required
-                  placeholder="you@example.com"
-                  className="w-full bg-[#0d0d0d] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-inter"
-                />
-              </div>
-              {/* subject */}
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
                   Subject
                 </label>
-
                 <input
                   type="text"
                   name="subject"
                   required
-                  defaultValue="I am hiring"
+                  defaultValue="I am hiring / Collaboration Opportunity"
                   placeholder="Subject"
-                  className="w-full bg-[#0d0d0d] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-inter"
+                  className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px]"
                 />
               </div>
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
                   Message
                 </label>
-
                 <textarea
                   rows={4}
                   name="message"
                   required
-                  placeholder="Tell me about your project..."
-                  className="w-full bg-[#0d0d0d] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors font-inter resize-none"
+                  placeholder="Tell me about your project or role details..."
+                  className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px] resize-none"
                 ></textarea>
               </div>
 
-              {/* Button */}
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-accent text-black font-bold py-3.5 rounded-lg mt-2 hover:bg-accent-hover transition-colors shadow-[0_0_15px_rgba(0,255,153,0.2)] hover:shadow-[0_0_25px_rgba(0,255,153,0.4)] disabled:opacity-70"
+                className="relative inline-flex items-center justify-center bg-accent text-black font-bold py-3.5 rounded-xl mt-2 hover:bg-accent-hover transition-all duration-300 shadow-[0_0_15px_rgba(0,255,153,0.15)] hover:shadow-[0_0_25px_rgba(0,255,153,0.35)] disabled:opacity-70 font-inter cursor-pointer overflow-hidden group"
               >
+                {/* Shimmer Effect */}
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
                 {loading ? "Sending..." : "Send Message"}
               </button>
 
-              {/* Status */}
+              {/* Success / Failure Status */}
               {success && (
-                <p className="text-sm text-center text-green-400">
+                <p className={`text-sm text-center font-semibold mt-2 font-inter ${success.includes("Failed") ? "text-red-400" : "text-accent"}`}>
                   {success}
                 </p>
               )}

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #050505;
-  --color-foreground: #ededed;
-  --color-accent: #00ff99; /* Bright neon green */
-  --color-accent-hover: #00cc7a;
-  --color-card-bg: #111111;
-  --color-card-border: #222222;
+  --color-background: #040406; /* Slightly tinted space black */
+  --color-foreground: #f3f4f6; /* Soft off-white */
+  --color-accent: #00ff99; /* Neon green */
+  --color-accent-hover: #00e68a;
+  --color-card-bg: #0a0a0d; /* Matching space-card background */
+  --color-card-border: #16161c; /* Soft cyber-slate border */
   
   --font-poppins: var(--font-poppins);
   --font-inter: var(--font-inter);
@@ -17,11 +17,17 @@
   color-scheme: dark;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   overflow-x: hidden;
+  position: relative;
 }
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -31,9 +37,30 @@ body {
   background: var(--color-background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #181822;
   border-radius: 4px;
+  border: 1px solid var(--color-card-border);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+
+/* Selection style overrides */
+::selection {
+  background-color: rgba(0, 255, 153, 0.25);
+  color: var(--color-accent);
+}
+
+/* Custom Cursor styling override */
+@media (min-width: 768px) {
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active input,
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active select {
+    cursor: none;
+  }
 }

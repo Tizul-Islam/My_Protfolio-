@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { SiNextdotjs, SiTypescript, SiPostgresql, SiDocker } from "react-icons/si";
 
 const socialLinks = [
   { Icon: FaGithub, href: "https://github.com/Tizul-Islam", label: "GitHub" },
@@ -16,68 +17,90 @@ export default function Hero() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 25 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
   };
 
   const floatingTransition = {
-    duration: 3,
+    duration: 4,
     repeat: Infinity,
     ease: "easeInOut" as const,
   };
 
   return (
-    <section id="home" className="flex items-center justify-center pt-24 pb-16 relative overflow-hidden">
-      {/* Background Glows */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -z-10" />
+    <section id="home" className="min-h-[90vh] flex items-center justify-center pt-32 pb-20 relative overflow-hidden bg-background">
+      {/* Visual Accent: Dot Grid Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none -z-20" />
 
-      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-6 items-center">
-        {/* Left Content */}
+      {/* Decorative Neon Blurs */}
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[130px] pointer-events-none -z-10 animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[130px] pointer-events-none -z-10" />
+
+      <div className="container mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center relative z-10">
+        {/* Left Side: Copywriting Content */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="flex flex-col items-start space-y-6"
+          className="lg:col-span-7 flex flex-col items-start space-y-6 text-left"
         >
-          <motion.div variants={itemVariants} className="inline-block border border-accent/30 bg-accent/10 text-accent px-4 py-1.5 rounded-full text-sm font-medium">
-            👋 Available for work
+          {/* Status Badge */}
+          <motion.div 
+            variants={itemVariants} 
+            className="inline-flex items-center gap-2 border border-accent/25 bg-accent/5 text-accent px-4 py-1.5 rounded-full text-xs font-semibold font-inter shadow-[0_0_15px_rgba(0,255,153,0.05)]"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+            </span>
+            Available for Opportunities
           </motion.div>
 
-          <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            Hi, I&apos;m <span className="text-accent">K.M Tizul Islam</span>
+          {/* Heading */}
+          <motion.h1 
+            variants={itemVariants} 
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight text-white font-poppins"
+          >
+            Hi, I&apos;m <span className="text-white relative">Tizul Islam</span>
             <br />
-            <span className="text-gray-300">Full Stack Developer</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-emerald-400 to-teal-400">
+              Full Stack Developer
+            </span>
           </motion.h1>
 
-          <motion.p variants={itemVariants} className="text-gray-400 max-w-lg font-inter text-lg">
-            Computer Science graduate with hands-on experience in React front ends and Node.js backends. I enjoy turning UI/UX
-            designs into responsive interfaces and building scalable, data-driven web applications.
+          {/* Subtitle / Description */}
+          <motion.p 
+            variants={itemVariants} 
+            className="text-gray-400 max-w-lg font-inter text-[16px] sm:text-[18px] leading-relaxed"
+          >
+            Computer Science graduate building responsive frontends, scalable backends, and full-stack web architectures. I craft optimized solutions with React, Next.js, and Node.js.
           </motion.p>
 
+          {/* Call to Action Buttons */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-2">
             <Link
               href="#contact"
-              className="bg-accent text-black px-8 py-3 rounded-full font-semibold hover:bg-accent-hover transition-colors shadow-[0_0_20px_rgba(0,255,153,0.3)] hover:shadow-[0_0_30px_rgba(0,255,153,0.5)] transform hover:-translate-y-1"
+              className="relative inline-flex items-center justify-center bg-accent text-black px-8 py-3 rounded-full font-bold hover:bg-accent-hover transition-all duration-300 shadow-[0_0_20px_rgba(0,255,153,0.25)] hover:shadow-[0_0_30px_rgba(0,255,153,0.45)] transform hover:-translate-y-0.5 font-inter"
             >
               Hire Me
             </Link>
             <a
               href="/tizul-islam-cv.pdf"
               download="Tizul-Islam-CV.pdf"
-              className="px-8 py-3 rounded-full font-semibold border border-gray-600 hover:border-accent hover:text-accent transition-all duration-300 transform hover:-translate-y-1"
+              className="px-8 py-3 rounded-full font-bold text-gray-300 border border-gray-800 hover:border-accent hover:text-accent bg-card-bg/40 hover:bg-accent/5 transition-all duration-300 transform hover:-translate-y-0.5 font-inter cursor-pointer"
             >
               Download Resume
             </a>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="flex gap-5 pt-4">
+          {/* Social Links */}
+          <motion.div variants={itemVariants} className="flex gap-4 pt-4">
             {socialLinks.map(({ Icon, href, label }) => (
               <a
                 key={label}
@@ -85,57 +108,117 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="w-10 h-10 rounded-full bg-card-bg border border-card-border flex items-center justify-center text-gray-400 hover:text-accent hover:border-accent transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                className="w-11 h-11 rounded-xl bg-card-bg border border-card-border/80 flex items-center justify-center text-gray-400 hover:text-accent hover:border-accent/40 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:bg-accent/5 cursor-pointer"
               >
-                <Icon size={18} />
+                <Icon size={19} />
               </a>
             ))}
           </motion.div>
         </motion.div>
 
-        {/* Right Content - Abstract Code Preview */}
+        {/* Right Side: High-tech Visuals */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="relative lg:ml-auto w-full max-w-md hidden md:block"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="lg:col-span-5 relative w-full max-w-lg mx-auto lg:ml-auto hidden md:block"
         >
-          <motion.div animate={{ y: [0, -15, 0] }} transition={floatingTransition} className="relative group">
-            {/* Decorative back plate */}
-            <div className="absolute -inset-4 bg-gradient-to-tr from-accent/20 to-blue-500/20 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-500 opacity-70" />
+          {/* Main Floating Code Editor Card */}
+          <motion.div 
+            animate={{ y: [0, -12, 0] }} 
+            transition={floatingTransition} 
+            className="relative group"
+          >
+            {/* Visual glow backdrop behind the editor */}
+            <div className="absolute -inset-4 bg-gradient-to-tr from-accent/20 to-blue-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-60 pointer-events-none" />
 
-            <div className="relative bg-[#0d0d0d] border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
+            <div className="relative bg-[#080808] border border-gray-800/80 rounded-2xl overflow-hidden shadow-2xl">
               {/* Fake Mac Window header */}
-              <div className="flex px-4 py-3 bg-[#111] border-b border-gray-800 gap-2 items-center">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <div className="ml-4 text-xs text-gray-500 font-inter">developer.tsx</div>
+              <div className="flex px-5 py-3.5 bg-[#0c0c0c] border-b border-gray-900/90 gap-2 items-center justify-between">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                  <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                  <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                </div>
+                <div className="text-xs text-gray-500 font-inter font-semibold tracking-wide">developer.tsx</div>
+                <div className="w-8 h-3" /> {/* Spacer */}
               </div>
-              {/* Code Content */}
-              <div className="p-6 text-sm font-fira-code leading-relaxed text-gray-300 overflow-x-auto">
-                <p><span className="text-pink-500">const</span> <span className="text-blue-400">developer</span> = {'{'}</p>
-                <p className="ml-4">name: <span className="text-yellow-300">&quot;K.M Tizul Islam&quot;</span>,</p>
-                <p className="ml-4">role: <span className="text-yellow-300">&quot;Full Stack Developer&quot;</span>,</p>
-                <p className="ml-4">skills: [<span className="text-yellow-300">&quot;React&quot;</span>, <span className="text-yellow-300">&quot;Next.js&quot;</span>, <span className="text-yellow-300">&quot;Node.js&quot;</span>, <span className="text-yellow-300">&quot;MongoDB&quot;</span>],</p>
-                <p className="ml-4">hardWorker: <span className="text-purple-400">true</span>,</p>
-                <p className="ml-4">problemSolver: <span className="text-purple-400">true</span>,</p>
-                <p className="ml-4 text-accent">hireable: <span className="text-purple-400">function</span>() {'{'}</p>
-                <p className="ml-8">return <span className="text-purple-400">this</span>.hardWorker &amp;&amp; <span className="text-purple-400">this</span>.problemSolver;</p>
-                <p className="ml-4">{'}'}</p>
-                <p>{'};'}</p>
+
+              {/* Code Content with syntax highlighting */}
+              <div className="p-6 text-xs sm:text-sm font-fira-code leading-relaxed text-gray-400 overflow-x-auto flex">
+                {/* Line Numbers */}
+                <div className="pr-4 border-r border-gray-900 text-gray-700 select-none text-right flex flex-col font-inter">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                  <span>9</span>
+                </div>
+
+                {/* Main Code */}
+                <div className="pl-4">
+                  <p>
+                    <span className="text-[#ff79c6]">const</span>{" "}
+                    <span className="text-[#50fa7b]">developer</span> = {"{"}
+                  </p>
+                  <p className="ml-4">
+                    name: <span className="text-[#f1fa8c]">&quot;K.M Tizul Islam&quot;</span>,
+                  </p>
+                  <p className="ml-4">
+                    role: <span className="text-[#f1fa8c]">&quot;Full Stack Developer&quot;</span>,
+                  </p>
+                  <p className="ml-4">
+                    skills: [
+                    <span className="text-[#f1fa8c]">&quot;Next.js&quot;</span>,{" "}
+                    <span className="text-[#f1fa8c]">&quot;TypeScript&quot;</span>,{" "}
+                    <span className="text-[#f1fa8c]">&quot;Node&quot;</span>
+                    ],
+                  </p>
+                  <p className="ml-4">
+                    hardWorker: <span className="text-[#bd93f9]">true</span>,
+                  </p>
+                  <p className="ml-4">
+                    problemSolver: <span className="text-[#bd93f9]">true</span>,
+                  </p>
+                  <p className="ml-4 text-accent">
+                    hireable: <span className="text-[#bd93f9]">function</span>() {"{"}
+                  </p>
+                  <p className="ml-8">
+                    return <span className="text-[#bd93f9]">this</span>.hardWorker &amp;&amp; <span className="text-[#bd93f9]">this</span>.problemSolver;
+                  </p>
+                  <p className="ml-4">{"}"}</p>
+                  <p>{"};"}</p>
+                </div>
               </div>
             </div>
 
-            {/* Floating decoration */}
+            {/* Bottom-Right Floating Degree Badge */}
             <motion.div
-              animate={{ y: [0, 10, 0], rotate: [0, 5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-8 -bottom-8 w-24 h-24 bg-card-bg border border-card-border rounded-xl shadow-xl p-4 flex items-center justify-center backdrop-blur-sm"
+              animate={{ y: [0, 8, 0], rotate: [0, -3, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -right-6 -bottom-6 w-24 h-24 bg-[#0a0a0af0] border border-gray-800/80 rounded-2xl shadow-2xl p-4 flex items-center justify-center backdrop-blur-sm group-hover:border-accent/30 transition-colors"
             >
-              <div className="text-center">
-                <span className="block text-2xl font-bold text-white">B.Sc</span>
-                <span className="block text-[10px] text-gray-400 uppercase font-inter mt-1">CSE<br />2025</span>
+              <div className="text-center font-inter select-none">
+                <span className="block text-2xl font-black text-accent">Clean</span>
+                <span className="block text-[9px] text-gray-400 uppercase tracking-widest font-bold mt-1">Code & Design</span>
+              </div>
+            </motion.div>
+
+            {/* Top-Left Floating Tech Stacks Badge */}
+            <motion.div
+              animate={{ y: [0, -6, 0], rotate: [0, 3, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -left-8 -top-8 bg-[#0a0a0af0] border border-gray-800/80 rounded-2xl shadow-2xl p-3 flex gap-3 items-center justify-center backdrop-blur-sm"
+            >
+              <div className="flex gap-2.5 text-gray-500 text-lg">
+                <span className="hover:text-accent transition-colors"><SiNextdotjs /></span>
+                <span className="hover:text-accent transition-colors"><SiTypescript /></span>
+                <span className="hover:text-accent transition-colors"><SiPostgresql /></span>
+                <span className="hover:text-accent transition-colors"><SiDocker /></span>
               </div>
             </motion.div>
           </motion.div>

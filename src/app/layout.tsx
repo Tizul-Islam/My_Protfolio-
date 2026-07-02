@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     "Portfolio of K.M Tizul Islam — Computer Science graduate, React & Node.js developer. B.Sc. CSE, Green University of Bangladesh.",
 };
 
+import WaterBackground from "@/components/WaterBackground";
+import CustomCursor from "@/components/CustomCursor";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,6 +35,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable} ${firaCode.variable} dark`}>
       <body className="font-poppins bg-background text-foreground antialiased selection:bg-accent/30 selection:text-accent">
+        <WaterBackground />
+        <CustomCursor />
         {children}
       </body>
     </html>

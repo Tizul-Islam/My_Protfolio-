@@ -2,43 +2,56 @@
 
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { BsCodeSlash, BsLaptop, BsCart3, BsPlug, BsLayers, BsCloudUpload } from "react-icons/bs";
+import {
+  BsCodeSlash,
+  BsLaptop,
+  BsBarChart,
+  BsLightningCharge,
+  BsCloudUpload,
+} from "react-icons/bs";
+import { FaServer } from "react-icons/fa";
 
 const services = [
   {
     icon: BsCodeSlash,
-    title: "React Front-End Development",
-    description: "Responsive UIs from design specs using React, Tailwind, and animation libraries like Framer Motion.",
-    link: "#projects",
-  },
-  {
-    icon: BsPlug,
-    title: "API Integration",
-    description: "Connecting SPAs to REST backends with Axios, JWT auth, and clean data flow across the stack.",
+    title: "Frontend Engineering",
+    description:
+      "Crafting modern, responsive, and accessible user interfaces with exceptional user experience.",
     link: "#projects",
   },
   {
     icon: BsLaptop,
-    title: "Full-Stack Web Apps",
-    description: "End-to-end features with Node.js, Express, and MongoDB or SQL databases where the project needs it.",
-    link: "#skills",
-  },
-  {
-    icon: BsCart3,
-    title: "B2B & Marketplace UIs",
-    description: "Role-based dashboards, commerce flows, and multi-tenant style experiences from real client work.",
+    title: "Full Stack Solutions",
+    description:
+      "Building secure, scalable, and production-ready web applications from frontend to backend.",
     link: "#projects",
   },
   {
-    icon: BsLayers,
-    title: "Component Architecture",
-    description: "Reusable components, modular styling, and maintainable structure for growing codebases.",
-    link: "#about",
+    icon: FaServer,
+    title: "API & Backend Engineering",
+    description:
+      "Developing high-performance REST APIs with authentication, database optimization, and clean architecture.",
+    link: "#skills",
+  },
+  {
+    icon: BsBarChart,
+    title: "Business Applications",
+    description:
+      "Developing dashboards, management systems, SaaS platforms, and enterprise web solutions.",
+    link: "#projects",
+  },
+  {
+    icon: BsLightningCharge,
+    title: "Performance Optimization",
+    description:
+      "Improving application speed, scalability, SEO, accessibility, and overall user experience.",
+    link: "#skills",
   },
   {
     icon: BsCloudUpload,
-    title: "Deploy & Delivery",
-    description: "Shipping to Vercel, Netlify, or cPanel with Git workflows and environment-aware builds.",
+    title: "Deployment & Maintenance",
+    description:
+      "Managing deployment pipelines, cloud hosting, monitoring, and continuous delivery for reliable production environments.",
     link: "#contact",
   },
 ];
@@ -50,34 +63,41 @@ export default function Services() {
         <SectionHeading title="What I Offer" subtitle="Services" />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="bg-card-bg border border-card-border p-8 rounded-2xl relative group overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-accent transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-
-              <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                <service.icon />
-              </div>
-
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">{service.title}</h3>
-              <p className="text-gray-400 font-inter text-sm leading-relaxed mb-6">{service.description}</p>
-
-              <a
-                href={service.link}
-                className="inline-flex items-center text-accent text-sm font-medium hover:text-white transition-colors group/link mt-auto"
+          {services.map((service, i) => {
+            const IconComponent = service.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-card-bg border border-card-border p-8 rounded-2xl relative group overflow-hidden flex flex-col justify-between h-full hover:border-accent/30 transition-all duration-300 shadow-lg"
               >
-                <span className="w-6 h-[1px] bg-accent mr-3 group-hover/link:w-8 transition-all" />
-                Learn more
-              </a>
-            </motion.div>
-          ))}
+                {/* Accent Top Border Glow on Hover */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-accent transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+
+                <div>
+                  {/* Icon Container */}
+                  <div className="w-14 h-14 bg-accent/5 border border-accent/10 rounded-xl flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 group-hover:bg-accent/10 transition-all duration-300">
+                    <IconComponent />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors duration-300 font-poppins">
+                    {service.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-400 font-inter text-[14px] leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                </div>
+
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
