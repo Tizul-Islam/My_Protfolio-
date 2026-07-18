@@ -175,6 +175,35 @@ export default function Contact() {
                 </div>
               </div>
 
+              {/* Grid for Contact Number & Social Media */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Contact Number */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
+                    Contact Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="contact_number"
+                    placeholder="contact your number"
+                    className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px]"
+                  />
+                </div>
+
+                {/* Social Media Link */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
+                    Social Media Link
+                  </label>
+                  <input
+                    type="text"
+                    name="social_media"
+                    placeholder="https://linkedin.com/in/yourprofile"
+                    className="w-full bg-[#0a0a0af0]/50 border border-gray-800/80 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/35 focus:bg-[#070707] transition-all font-inter text-[14px]"
+                  />
+                </div>
+              </div>
+
               {/* Subject */}
               <div>
                 <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 font-inter">
