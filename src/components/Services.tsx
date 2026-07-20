@@ -1,62 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import {
-  BsCodeSlash,
-  BsLaptop,
-  BsBarChart,
-  BsLightningCharge,
-  BsCloudUpload,
-} from "react-icons/bs";
-import { FaServer } from "react-icons/fa";
-
-const services = [
-  {
-    icon: BsCodeSlash,
-    title: "Frontend Engineering",
-    description:
-      "Crafting modern, responsive, and accessible user interfaces with exceptional user experience.",
-    link: "#projects",
-  },
-  {
-    icon: BsLaptop,
-    title: "Full Stack Solutions",
-    description:
-      "Building secure, scalable, and production-ready web applications from frontend to backend.",
-    link: "#projects",
-  },
-  {
-    icon: FaServer,
-    title: "API & Backend Engineering",
-    description:
-      "Developing high-performance REST APIs with authentication, database optimization, and clean architecture.",
-    link: "#skills",
-  },
-  {
-    icon: BsBarChart,
-    title: "Business Applications",
-    description:
-      "Developing dashboards, management systems, SaaS platforms, and enterprise web solutions.",
-    link: "#projects",
-  },
-  {
-    icon: BsLightningCharge,
-    title: "Performance Optimization",
-    description:
-      "Improving application speed, scalability, SEO, accessibility, and overall user experience.",
-    link: "#skills",
-  },
-  {
-    icon: BsCloudUpload,
-    title: "Deployment & Maintenance",
-    description:
-      "Managing deployment pipelines, cloud hosting, monitoring, and continuous delivery for reliable production environments.",
-    link: "#contact",
-  },
-];
+import { loadPortfolioData, Service } from "@/data/portfolio";
+import { getIcon } from "@/data/iconRegistry";
 
 export default function Services() {
+  const [services] = useState<Service[]>(() => loadPortfolioData().services);
+
+  if (!services.length) return null;
+
   return (
     <section id="services" className="py-24 bg-card-bg/30">
       <div className="container mx-auto px-6">
@@ -64,7 +18,7 @@ export default function Services() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => {
-            const IconComponent = service.icon;
+            const IconComponent = getIcon(service.iconKey);
             return (
               <motion.div
                 key={i}
@@ -94,7 +48,6 @@ export default function Services() {
                     {service.description}
                   </p>
                 </div>
-
               </motion.div>
             );
           })}

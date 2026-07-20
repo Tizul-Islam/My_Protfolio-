@@ -64,3 +64,50 @@ body {
     cursor: none;
   }
 }
+
+/* ============================================================
+   Admin Dashboard Utility Classes
+   ============================================================ */
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  font-family: var(--font-inter);
+}
+
+.admin-input {
+  width: 100%;
+  background-color: #0f0f18;
+  border: 1px solid #1f2937;
+  border-radius: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  color: #f3f4f6;
+  font-size: 0.875rem;
+  font-family: var(--font-inter);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.admin-input:focus {
+  border-color: rgba(0, 255, 153, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 255, 153, 0.08);
+}
+
+.admin-input::placeholder {
+  color: #4b5563;
+}
+
+.admin-input option,
+.admin-input optgroup {
+  background-color: #0f0f18;
+  color: #f3f4f6;
+}
