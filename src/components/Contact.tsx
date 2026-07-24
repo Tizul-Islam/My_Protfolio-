@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import SectionHeading from "./SectionHeading";
 import {
@@ -9,13 +9,17 @@ import {
   HiOutlineLocationMarker,
   HiOutlinePhone,
 } from "react-icons/hi";
-import { loadPortfolioData, ContactInfo } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, ContactInfo } from "@/data/portfolio";
 
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
-  const [contact] = useState<ContactInfo>(() => loadPortfolioData().contact);
+  const [contact, setContact] = useState<ContactInfo>(defaultPortfolioData.contact);
+
+  useEffect(() => {
+    setContact(loadPortfolioData().contact);
+  }, []);
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

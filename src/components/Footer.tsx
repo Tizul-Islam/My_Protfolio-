@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
-import { loadPortfolioData, HeroData } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, HeroData } from "@/data/portfolio";
 
 const quickLinks = [
   { name: "Home", href: "#home" },
@@ -21,8 +21,14 @@ const socialIconMap = {
 };
 
 export default function Footer() {
-  const [hero] = useState<HeroData>(() => loadPortfolioData().hero);
-  const contactEmail = useState(() => loadPortfolioData().contact.email)[0];
+  const [hero, setHero] = useState<HeroData>(defaultPortfolioData.hero);
+  const [contactEmail, setContactEmail] = useState(defaultPortfolioData.contact.email);
+
+  useEffect(() => {
+    const data = loadPortfolioData();
+    setHero(data.hero);
+    setContactEmail(data.contact.email);
+  }, []);
   const socialLinks = hero.socialLinks;
 
   return (
