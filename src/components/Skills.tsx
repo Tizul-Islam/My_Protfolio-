@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { loadPortfolioData, SkillCategory } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, SkillCategory } from "@/data/portfolio";
 import { getIcon } from "@/data/iconRegistry";
 
 export default function Skills() {
-  const [skillCategories] = useState<SkillCategory[]>(() => loadPortfolioData().skillCategories);
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>(defaultPortfolioData.skillCategories);
+
+  useEffect(() => {
+    setSkillCategories(loadPortfolioData().skillCategories);
+  }, []);
 
   if (!skillCategories.length) return null;
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { FaLaptopCode, FaProjectDiagram, FaGraduationCap, FaCalendarAlt, FaBriefcase } from "react-icons/fa";
 import Image from "next/image";
-import { loadPortfolioData, AboutData } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, AboutData } from "@/data/portfolio";
 
 type TabId = "profile" | "experience" | "education";
 
@@ -17,7 +17,11 @@ const statIconMap: Record<string, React.ComponentType<{ className?: string }>> =
 
 export default function About() {
   const [activeTab, setActiveTab] = useState<TabId>("profile");
-  const [about] = useState<AboutData>(() => loadPortfolioData().about);
+  const [about, setAbout] = useState<AboutData>(defaultPortfolioData.about);
+
+  useEffect(() => {
+    setAbout(loadPortfolioData().about);
+  }, []);
 
   const tabs = [
     { id: "profile", label: "Profile" },

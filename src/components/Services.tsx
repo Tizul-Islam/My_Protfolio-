@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { loadPortfolioData, Service } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, Service } from "@/data/portfolio";
 import { getIcon } from "@/data/iconRegistry";
 
 export default function Services() {
-  const [services] = useState<Service[]>(() => loadPortfolioData().services);
+  const [services, setServices] = useState<Service[]>(defaultPortfolioData.services);
+
+  useEffect(() => {
+    setServices(loadPortfolioData().services);
+  }, []);
 
   if (!services.length) return null;
 

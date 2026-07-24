@@ -6,10 +6,14 @@ import Link from "next/link";
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { SiNextdotjs, SiTypescript, SiPostgresql, SiDocker } from "react-icons/si";
 import Magnetic from "./Magnetic";
-import { loadPortfolioData, HeroData } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, HeroData } from "@/data/portfolio";
 
 export default function Hero() {
-  const [heroData] = useState<HeroData>(() => loadPortfolioData().hero);
+  const [heroData, setHeroData] = useState<HeroData>(defaultPortfolioData.hero);
+
+  useEffect(() => {
+    setHeroData(loadPortfolioData().hero);
+  }, []);
 
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedRole, setDisplayedRole] = useState("");

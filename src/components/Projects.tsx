@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import SectionHeading from "./SectionHeading";
 import { FiExternalLink, FiCheck } from "react-icons/fi";
 import { FaGithub } from "react-icons/fa";
-import { loadPortfolioData, Project } from "@/data/portfolio";
+import { loadPortfolioData, defaultPortfolioData, Project } from "@/data/portfolio";
 
 export default function Projects() {
-  const [projects] = useState<Project[]>(() => loadPortfolioData().projects);
+  const [projects, setProjects] = useState<Project[]>(defaultPortfolioData.projects);
   const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    setProjects(loadPortfolioData().projects);
+  }, []);
 
   const displayedProjects = showAll ? projects : projects.slice(0, 6);
 
@@ -59,8 +63,8 @@ export default function Projects() {
                 <div className="flex flex-grow flex-col p-6">
                   {/* Tech Tags */}
                   <div className="mb-4 flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="rounded-full border border-card-border bg-background/50 px-3 py-1 font-inter text-[12px] uppercase tracking-wider text-gray-300 hover:text-white transition-colors cursor-default">
+                    {project.tags.map((tag, idx) => (
+                      <span key={`${tag}-${idx}`} className="rounded-full border border-card-border bg-background/50 px-3 py-1 font-inter text-[12px] uppercase tracking-wider text-gray-300 hover:text-white transition-colors cursor-default">
                         {tag}
                       </span>
                     ))}

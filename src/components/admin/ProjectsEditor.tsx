@@ -133,10 +133,10 @@ export default function ProjectsEditor({ data, onChange, onSave, saved }: Props)
                       <input id={`proj-github-${i}`} type="url" value={proj.githubUrl ?? ""} onChange={(e) => update(i, "githubUrl", e.target.value)} className="admin-input" placeholder="https://github.com/..." />
                     </div>
                     <div className="admin-field">
-                      <label className="admin-label">Image Path <span className="text-gray-600">(/public/projects/...)</span></label>
-                      <input id={`proj-image-${i}`} type="text" value={proj.image ?? ""} onChange={(e) => update(i, "image", e.target.value)} className="admin-input" placeholder="/projects/myproject.png" />
+                      <label className="admin-label">Image URL / Path <span className="text-gray-600">(paste link or /projects/...)</span></label>
+                      <input id={`proj-image-${i}`} type="text" value={proj.image ?? ""} onChange={(e) => update(i, "image", e.target.value)} className="admin-input" placeholder="https://... or /projects/myproject.png" />
                     </div>
-                  </div>
+                  </div> 
 
                   <div className="admin-field">
                     <label className="admin-label">Description</label>

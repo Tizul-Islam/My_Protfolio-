@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Service } from "@/data/portfolio";
 import { iconGroups, getIcon } from "@/data/iconRegistry";
 
@@ -11,7 +12,10 @@ type Props = {
 };
 
 export default function ServicesEditor({ data, onChange, onSave, saved }: Props) {
-  const update = (i: number, field: keyof Service, value: string) => {
+  const [newTag, setNewTag] = useState<Record<number, string>>({});
+  const [newFeature, setNewFeature] = useState<Record<number, string>>({});
+
+  const update = (i: number, field: keyof Service, value: any) => {
     const services = [...data];
     services[i] = { ...services[i], [field]: value };
     onChange(services);
@@ -23,8 +27,42 @@ export default function ServicesEditor({ data, onChange, onSave, saved }: Props)
       title: "New Service",
       description: "Service description here...",
       link: "#contact",
+      features: ["Feature 1"],
+      tags: ["React"],
     };
     onChange([...data, newService]);
+  };
+
+  const addTag = (i: number) => {
+    const tag = newTag[i]?.trim();
+    if (!tag) return;
+    const currentTags = data[i].tags || [];
+    update(i, "tags", [...currentTags, tag]);
+    setNewTag((prev) => ({ ...prev, [i]: "" }));
+  };
+
+  const removeTag = (srvIdx: number, tagIdx: number) => {
+    const currentTags = data[srvIdx].tags || [];
+    update(srvIdx, "tags", currentTags.filter((_, i) => i !== tagIdx));
+  };
+
+  const addFeature = (i: number) => {
+    const feat = newFeature[i]?.trim();
+    if (!feat) return;
+    const currentFeatures = data[i].features || [];
+    update(i, "features", [...currentFeatures, feat]);
+    setNewFeature((prev) => ({ ...prev, [i]: "" }));
+  };
+
+  const removeFeature = (srvIdx: number, featIdx: number) => {
+    const currentFeatures = data[srvIdx].features || [];
+    update(srvIdx, "features", currentFeatures.filter((_, i) => i !== featIdx));
+  };
+
+  const updateFeature = (srvIdx: number, featIdx: number, value: string) => {
+    const currentFeatures = [...(data[srvIdx].features || [])];
+    currentFeatures[featIdx] = value;
+    update(srvIdx, "features", currentFeatures);
   };
 
   const removeService = (i: number) => {
@@ -121,6 +159,56 @@ export default function ServicesEditor({ data, onChange, onSave, saved }: Props)
                   className="admin-input"
                   placeholder="#projects"
                 />
+              </div>
+
+              {/* Features */}
+              <div className="admin-field">
+                <label className="admin-label">Key Features <span className="text-gray-600">(max 3 shown)</span></label>
+                <div className="space-y-2">
+                  {(service.features || []).map((feat, fi) => (
+                    <div key={fi} className="flex gap-2">
+                      <input type="text" value={feat} onChange={(e) => updateFeature(i, fi, e.target.value)} className="admin-input flex-1" />
+                      <button onClick={() => removeFeature(i, fi)} className="px-2.5 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-all cursor-pointer text-sm">✕</button>
+                    </div>
+                  ))}
+                  <div className="flex gap-2">
+                    <input
+                      id={`service-new-feat-${i}`}
+                      type="text"
+                      value={newFeature[i] ?? ""}
+                      onChange={(e) => setNewFeature((prev) => ({ ...prev, [i]: e.target.value }))}
+                      onKeyDown={(e) => e.key === "Enter" && addFeature(i)}
+                      className="admin-input flex-1 border-dashed"
+                      placeholder="Add feature"
+                    />
+                    <button onClick={() => addFeature(i)} disabled={!newFeature[i]?.trim()} className="px-4 py-2 rounded-lg bg-[#00ff99]/10 text-[#00ff99] border border-[#00ff99]/20 hover:bg-[#00ff99]/20 transition-all disabled:opacity-30 cursor-pointer text-sm font-bold">+ Add</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="admin-field">
+                <label className="admin-label">Tech Tags</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {(service.tags || []).map((tag, ti) => (
+                    <span key={ti} className="flex items-center gap-1.5 bg-[#0f0f1a] border border-gray-800 rounded-full px-3 py-1 text-xs text-gray-300 font-inter">
+                      {tag}
+                      <button onClick={() => removeTag(i, ti)} className="text-gray-600 hover:text-red-400 transition-colors cursor-pointer text-xs">✕</button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    id={`service-new-tag-${i}`}
+                    type="text"
+                    value={newTag[i] ?? ""}
+                    onChange={(e) => setNewTag((prev) => ({ ...prev, [i]: e.target.value }))}
+                    onKeyDown={(e) => e.key === "Enter" && addTag(i)}
+                    className="admin-input flex-1 border-dashed"
+                    placeholder="Add tag (e.g. React)"
+                  />
+                  <button onClick={() => addTag(i)} disabled={!newTag[i]?.trim()} className="px-4 py-2 rounded-lg bg-[#00ff99]/10 text-[#00ff99] border border-[#00ff99]/20 hover:bg-[#00ff99]/20 transition-all disabled:opacity-30 cursor-pointer text-sm font-bold">+ Add</button>
+                </div>
               </div>
             </div>
           );

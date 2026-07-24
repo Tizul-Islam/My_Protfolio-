@@ -57,6 +57,8 @@ export type Service = {
   title: string;
   description: string;
   link: string;
+  features?: string[];
+  tags?: string[];
 };
 
 export type ContactInfo = {
