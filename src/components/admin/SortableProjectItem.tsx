@@ -1,13 +1,15 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { DBProject } from "./SortableProjectList";
-import { MdDragIndicator } from "react-icons/md"; // Using material icons from react-icons
+import { MdDragIndicator, MdEdit, MdDelete } from "react-icons/md"; // Using material icons from react-icons
 
 type Props = {
   project: DBProject;
+  onEdit: (project: DBProject) => void;
+  onDelete: (id: string) => void;
 };
 
-export default function SortableProjectItem({ project }: Props) {
+export default function SortableProjectItem({ project, onEdit, onDelete }: Props) {
   const {
     attributes,
     listeners,
@@ -55,8 +57,27 @@ export default function SortableProjectItem({ project }: Props) {
           {project.tags.join(", ").length > 35 ? "..." : ""}
         </span>
         
-        {/* For this simplified drag-and-drop version, we omit the edit functionality 
-            that was in the old ProjectsEditor, or you can add it back later. */}
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onEdit(project)}
+            className="p-2 text-gray-500 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+            title="Edit Project"
+          >
+            <MdEdit size={18} />
+          </button>
+          <button
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this project?")) {
+                onDelete(project.id);
+              }
+            }}
+            className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+            title="Delete Project"
+          >
+            <MdDelete size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );

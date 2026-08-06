@@ -17,6 +17,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import SortableProjectItem from "./SortableProjectItem";
+import ProjectForm from "./ProjectForm";
+import { MdAdd } from "react-icons/md";
 import { Project } from "@/data/portfolio"; // keep type compatibility if needed, or Prisma type
 // Alternatively, since we use Prisma now, we might expect `id` and `position` on the Project.
 
@@ -32,6 +34,9 @@ export default function SortableProjectList() {
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [editingProject, setEditingProject] = useState<DBProject | null>(null);
 
   // Fetch initial data
   useEffect(() => {
@@ -103,6 +108,41 @@ export default function SortableProjectList() {
     }
   };
 
+  const handleAddSubmit = async (data: Partial<DBProject>) => {
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to add project");
+    const newProject = await res.json();
+    setProjects([...projects, newProject]);
+    setIsAdding(false);
+  };
+
+  const handleEditSubmit = async (data: Partial<DBProject>) => {
+    if (!editingProject) return;
+    const res = await fetch(`/api/projects/${editingProject.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update project");
+    const updatedProject = await res.json();
+    setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)));
+    setEditingProject(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete project");
+      setProjects(projects.filter((p) => p.id !== id));
+    } catch (err: any) {
+      setError(err.message || "Failed to delete project");
+    }
+  };
+
   if (isLoading) {
     return <div className="text-gray-400">Loading projects...</div>;
   }
@@ -119,11 +159,21 @@ export default function SortableProjectList() {
         </div>
         <div className="flex items-center gap-3">
           {error && <span className="text-red-400 text-sm">{error}</span>}
+          
+          {!isAdding && !editingProject && (
+            <button
+              onClick={() => setIsAdding(true)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+            >
+              <MdAdd size={20} /> Add Project
+            </button>
+          )}
+
           <button
             onClick={handleSave}
-            disabled={!isDirty || isSaving}
+            disabled={!isDirty || isSaving || isAdding || !!editingProject}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm font-inter transition-all duration-300 ${
-              !isDirty && !isSaving
+              (!isDirty || isAdding || !!editingProject) && !isSaving
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed"
                 : isSaving
                 ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 cursor-wait"
@@ -135,23 +185,41 @@ export default function SortableProjectList() {
         </div>
       </div>
 
-      {/* List */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={projects.map((p) => p.id)}
-          strategy={verticalListSortingStrategy}
+      {/* Main Content Area */}
+      {isAdding ? (
+        <ProjectForm
+          onSubmit={handleAddSubmit}
+          onCancel={() => setIsAdding(false)}
+        />
+      ) : editingProject ? (
+        <ProjectForm
+          initialData={editingProject}
+          onSubmit={handleEditSubmit}
+          onCancel={() => setEditingProject(null)}
+        />
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          <div className="space-y-4">
-            {projects.map((proj) => (
-              <SortableProjectItem key={proj.id} project={proj} />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+          <SortableContext
+            items={projects.map((p) => p.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-4">
+              {projects.map((proj) => (
+                <SortableProjectItem 
+                  key={proj.id} 
+                  project={proj} 
+                  onEdit={setEditingProject}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
     </div>
   );
 }
