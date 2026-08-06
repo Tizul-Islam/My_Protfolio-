@@ -13,7 +13,7 @@ import AdminSidebar, { AdminSection } from "@/components/admin/AdminSidebar";
 import HeroEditor from "@/components/admin/HeroEditor";
 import AboutEditor from "@/components/admin/AboutEditor";
 import SkillsEditor from "@/components/admin/SkillsEditor";
-import ProjectsEditor from "@/components/admin/ProjectsEditor";
+import SortableProjectList from "@/components/admin/SortableProjectList";
 import ServicesEditor from "@/components/admin/ServicesEditor";
 import ContactEditor from "@/components/admin/ContactEditor";
 import PasswordEditor from "@/components/admin/PasswordEditor";
@@ -155,12 +155,7 @@ export default function AdminDashboardPage() {
             />
           )}
           {activeSection === "projects" && (
-            <ProjectsEditor
-              data={data.projects}
-              onChange={(projects) => handleDataChange((prev) => ({ ...prev, projects }))}
-              onSave={handleSave}
-              saved={saved}
-            />
+            <SortableProjectList />
           )}
           {activeSection === "services" && (
             <ServicesEditor

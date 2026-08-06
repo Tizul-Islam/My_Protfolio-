@@ -13,7 +13,10 @@ export default function Projects() {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    setProjects(loadPortfolioData().projects);
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => setProjects(data))
+      .catch((err) => console.error("Failed to load projects", err));
   }, []);
 
   const displayedProjects = showAll ? projects : projects.slice(0, 6);
