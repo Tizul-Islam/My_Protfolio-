@@ -16,12 +16,42 @@ export default function ProjectForm({ initialData, onSubmit, onCancel }: Project
   const [githubUrl, setGithubUrl] = useState(initialData?.githubUrl || "");
   const [image, setImage] = useState(initialData?.image || "");
   
-  // Store features and tags as comma-separated strings for easy editing
-  const [features, setFeatures] = useState(initialData?.features?.join(", ") || "");
-  const [tags, setTags] = useState(initialData?.tags?.join(", ") || "");
+  const [features, setFeatures] = useState<string[]>(initialData?.features || []);
+  const [tags, setTags] = useState<string[]>(initialData?.tags || []);
+
+  const [newFeature, setNewFeature] = useState("");
+  const [newTag, setNewTag] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const addFeature = () => {
+    const feat = newFeature.trim();
+    if (!feat) return;
+    setFeatures([...features, feat]);
+    setNewFeature("");
+  };
+
+  const removeFeature = (idx: number) => {
+    setFeatures(features.filter((_, i) => i !== idx));
+  };
+
+  const updateFeature = (idx: number, value: string) => {
+    const newFeatures = [...features];
+    newFeatures[idx] = value;
+    setFeatures(newFeatures);
+  };
+
+  const addTag = () => {
+    const tag = newTag.trim();
+    if (!tag) return;
+    setTags([...tags, tag]);
+    setNewTag("");
+  };
+
+  const removeTag = (idx: number) => {
+    setTags(tags.filter((_, i) => i !== idx));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,17 +65,14 @@ export default function ProjectForm({ initialData, onSubmit, onCancel }: Project
     }
 
     try {
-      const formattedFeatures = features.split(",").map((s) => s.trim()).filter((s) => s);
-      const formattedTags = tags.split(",").map((s) => s.trim()).filter((s) => s);
-
       await onSubmit({
         title,
         description,
         liveUrl,
         githubUrl: githubUrl || undefined,
         image: image || undefined,
-        features: formattedFeatures,
-        tags: formattedTags,
+        features,
+        tags,
       });
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
@@ -54,90 +81,145 @@ export default function ProjectForm({ initialData, onSubmit, onCancel }: Project
   };
 
   return (
-    <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-xl">
-      <h3 className="text-xl font-bold text-white mb-6 font-poppins">
-        {initialData ? "Edit Project" : "Add New Project"}
-      </h3>
-      
-      {error && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg text-sm">{error}</div>}
+    <div className="bg-[#0a0a12] border border-gray-800/60 rounded-2xl overflow-hidden mt-4">
+      <div className="flex items-center justify-between border-b border-gray-800/60 px-5 py-4">
+        <h3 className="text-sm font-bold text-[#00ff99] font-inter">
+          {initialData ? `Editing: ${title}` : "Create New Project"}
+        </h3>
+        <button onClick={onCancel} className="text-gray-400 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 font-inter">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Title *</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99]"
+      <div className="px-5 py-5 space-y-5">
+        {error && <div className="p-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg text-sm">{error}</div>}
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="admin-field">
+            <label className="admin-label">Project Title *</label>
+            <input 
+              type="text" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              className="admin-input" 
               required
             />
           </div>
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Live URL *</label>
-            <input
-              type="url"
-              value={liveUrl}
-              onChange={(e) => setLiveUrl(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99]"
+          <div className="admin-field">
+            <label className="admin-label">Live URL *</label>
+            <input 
+              type="url" 
+              value={liveUrl} 
+              onChange={(e) => setLiveUrl(e.target.value)} 
+              className="admin-input" 
+              placeholder="https://..." 
               required
             />
           </div>
-        </div>
+          <div className="admin-field">
+            <label className="admin-label">GitHub URL <span className="text-gray-600">(optional)</span></label>
+            <input 
+              type="url" 
+              value={githubUrl} 
+              onChange={(e) => setGithubUrl(e.target.value)} 
+              className="admin-input" 
+              placeholder="https://github.com/..." 
+            />
+          </div>
+          <div className="admin-field">
+            <label className="admin-label">Image URL / Path <span className="text-gray-600">(paste link or /projects/...)</span></label>
+            <input 
+              type="text" 
+              value={image} 
+              onChange={(e) => setImage(e.target.value)} 
+              className="admin-input" 
+              placeholder="https://... or /projects/myproject.png" 
+            />
+          </div>
+        </div> 
 
-        <div>
-          <label className="block text-sm text-gray-400 mb-1">Description *</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99] h-24"
+        <div className="admin-field">
+          <label className="admin-label">Description *</label>
+          <textarea 
+            value={description} 
+            onChange={(e) => setDescription(e.target.value)} 
+            className="admin-input min-h-[90px] resize-none" 
             required
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">GitHub URL</label>
-            <input
-              type="url"
-              value={githubUrl}
-              onChange={(e) => setGithubUrl(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99]"
-            />
+        {/* Features */}
+        <div className="admin-field">
+          <label className="admin-label">Key Features</label>
+          <div className="space-y-2">
+            {features.map((feat, fi) => (
+              <div key={fi} className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={feat} 
+                  onChange={(e) => updateFeature(fi, e.target.value)} 
+                  className="admin-input flex-1" 
+                />
+                <button 
+                  type="button" 
+                  onClick={() => removeFeature(fi)} 
+                  className="px-2.5 py-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-all cursor-pointer text-sm"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newFeature}
+                onChange={(e) => setNewFeature(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())}
+                className="admin-input flex-1 border-dashed"
+                placeholder="Add feature"
+              />
+              <button 
+                type="button" 
+                onClick={addFeature} 
+                disabled={!newFeature.trim()} 
+                className="px-4 py-2 rounded-lg bg-[#00ff99]/10 text-[#00ff99] border border-[#00ff99]/20 hover:bg-[#00ff99]/20 transition-all disabled:opacity-30 cursor-pointer text-sm font-bold"
+              >
+                + Add
+              </button>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Image URL</label>
+        </div>
+
+        {/* Tags */}
+        <div className="admin-field">
+          <label className="admin-label">Tech Tags</label>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {tags.map((tag, ti) => (
+              <span key={ti} className="flex items-center gap-1.5 bg-[#0f0f1a] border border-gray-800 rounded-full px-3 py-1 text-xs text-gray-300 font-inter">
+                {tag}
+                <button type="button" onClick={() => removeTag(ti)} className="text-gray-600 hover:text-red-400 transition-colors cursor-pointer text-xs">✕</button>
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-2">
             <input
               type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99]"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+              className="admin-input flex-1 border-dashed"
+              placeholder="Add tag (e.g. React)"
             />
+            <button 
+              type="button" 
+              onClick={addTag} 
+              disabled={!newTag.trim()} 
+              className="px-4 py-2 rounded-lg bg-[#00ff99]/10 text-[#00ff99] border border-[#00ff99]/20 hover:bg-[#00ff99]/20 transition-all disabled:opacity-30 cursor-pointer text-sm font-bold"
+            >
+              + Add
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Features (comma separated)</label>
-            <textarea
-              value={features}
-              onChange={(e) => setFeatures(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99] h-20"
-              placeholder="e.g. User Auth, Stripe Integration, Real-time Chat"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Tags (comma separated)</label>
-            <textarea
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff99] h-20"
-              placeholder="e.g. Next.js, Tailwind, Prisma"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="pt-4 flex justify-end gap-3 border-t border-gray-800/60 mt-4">
           <button
             type="button"
             onClick={onCancel}
@@ -147,14 +229,15 @@ export default function ProjectForm({ initialData, onSubmit, onCancel }: Project
             Cancel
           </button>
           <button
-            type="submit"
+            type="button"
+            onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-5 py-2.5 rounded-xl font-bold text-sm bg-[#00ff99] text-black hover:bg-[#00e688] shadow-[0_0_20px_rgba(0,255,153,0.2)] transition-all flex items-center gap-2"
+            className="px-5 py-2.5 rounded-xl font-bold text-sm bg-[#00ff99] text-black hover:bg-[#00e688] shadow-[0_0_20px_rgba(0,255,153,0.2)] transition-all"
           >
             {isSubmitting ? "Saving..." : "Save Project"}
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
