@@ -43,7 +43,13 @@ export default function SortableProjectList() {
     fetch("/api/projects")
       .then((res) => res.json())
       .then((data) => {
-        setProjects(data);
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else {
+          console.error("Failed to load projects, invalid data format:", data);
+          setError("Failed to load projects (database unavailable)");
+          setProjects([]);
+        }
         setIsLoading(false);
       })
       .catch((err) => {

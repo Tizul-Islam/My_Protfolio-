@@ -15,13 +15,21 @@ export default function Projects() {
   useEffect(() => {
     fetch("/api/projects")
       .then((res) => res.json())
-      .then((data) => setProjects(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else {
+          console.error("Failed to load projects, invalid data format:", data);
+        }
+      })
       .catch((err) => console.error("Failed to load projects", err));
   }, []);
 
-  const displayedProjects = showAll ? projects : projects.slice(0, 6);
+  // Ensure projects is an array before calling slice
+  const safeProjects = Array.isArray(projects) ? projects : defaultPortfolioData.projects;
+  const displayedProjects = showAll ? safeProjects : safeProjects.slice(0, 6);
 
-  if (!projects.length) return null;
+  if (!safeProjects.length) return null;
 
   return (
     <section id="projects" className="py-24">
